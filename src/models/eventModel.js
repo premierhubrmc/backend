@@ -7,6 +7,9 @@ export const getUpcomingEvents = async () => {
        e.id, 
        e.event_date, 
        e.location, 
+       type,
+       program,
+       status, 
        e.is_featured, 
        e.icon_key,         -- include icon key
        t.title, 
@@ -24,7 +27,10 @@ export const getEventById = async (id) => {
     `SELECT 
        e.id, 
        e.event_date, 
-       e.location, 
+       e.location,
+       type,
+       program,
+       status, 
        e.is_featured, 
        t.title, 
        t.pdf_url
@@ -41,18 +47,21 @@ export const getEventById = async (id) => {
 };
 
 
-export const createEvent = async ({ training_id, event_date, location, is_featured, icon_key }) => {
+export const createEvent = async ({ training_id, event_date, location,type, program, status, is_featured, icon_key }) => {
   const [result] = await pool.query(
-    `INSERT INTO upcoming_events (training_id, event_date, location, is_featured, icon_key) 
-     VALUES (?, ?, ?, ?, ?)`,
-    [training_id, event_date, location, is_featured, icon_key] // include icon_key here
+    `INSERT INTO upcoming_events (training_id, event_date, location, type, program, status, is_featured, icon_key) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [training_id, event_date, location, type, program, status, is_featured, icon_key] // include icon_key here
   );
 
   return { 
     id: result.insertId, 
     training_id, 
     event_date, 
-    location, 
+    location,
+    type, 
+    program, 
+    status, 
     is_featured, 
     icon_key 
   };
