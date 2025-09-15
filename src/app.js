@@ -5,6 +5,7 @@ import trainingRoutes from "./routes/training.js"
 import eventRoutes from "./routes/event.js"
 
 import cors from "cors"
+import trainingRegitrationRoute from "./routes/trainingRegistration.js"
 
 
 
@@ -28,6 +29,7 @@ app.use(cors({
 app.use("/api", userRoutes)
 app.use("/api/trainings", trainingRoutes)
 app.use("/api/events", eventRoutes)
+app.use("/api/training/registration", trainingRegitrationRoute)
 
 export default app
 
