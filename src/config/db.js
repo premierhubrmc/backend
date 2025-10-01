@@ -4,13 +4,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
+  host: process.env.DB_HOST || "127.0.0.1", // ✅ fallback to IPv4
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306, // ✅ ensure port is set
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  enableKeepAlive: true,   // ✅ keeps TCP alive
+  connectTimeout: 10000,   // ✅ prevents hanging
 });
 
 // ✅ Test connection
