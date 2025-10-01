@@ -4,14 +4,15 @@ import pool from "../config/db.js";
 export const getUpcomingEvents = async () => {
   const [rows] = await pool.query(
     `SELECT 
-       e.id, 
+       e.id AS event_id, 
+       e.training_id,        -- ✅ include the training_id
        e.event_date, 
        e.location, 
-       type,
-       program,
-       status, 
+       e.type,
+       e.program,
+       e.status, 
        e.is_featured, 
-       e.icon_key,         -- include icon key
+       e.icon_key,
        t.title, 
        t.pdf_url
      FROM upcoming_events e

@@ -29,10 +29,19 @@ export const userTrainingRegistration = async (user_name, email, phone, event_id
 export const getAllRegistrations = async () => {
   try {
     const [rows] = await pool.query(
-      `SELECT r.id, r.user_name, r.email, r.phone, r.event_id, p.title
-       FROM training_registration r
-       JOIN training_programs p ON r.event_id = p.id
-       ORDER BY r.created_at DESC`
+      `SELECT 
+        r.id,
+        r.user_name,
+        r.email,
+        r.phone,
+        r.event_id,
+        p.title,
+        u.event_date
+      FROM training_registration r
+      JOIN training_programs p ON r.event_id = p.id
+      LEFT JOIN upcoming_events u ON u.training_id = p.id
+      ORDER BY r.created_at DESC;
+      `
     );
     return rows;
   } catch (error) {
@@ -40,6 +49,7 @@ export const getAllRegistrations = async () => {
     throw error;
   }
 };
+
 
 // ✅ Read - Get registration by ID
 export const getRegistrationById = async (id) => {
