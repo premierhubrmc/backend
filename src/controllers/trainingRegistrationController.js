@@ -4,7 +4,7 @@ import {
   getRegistrationById,
   updateRegistration,
   deleteRegistration,
-} from "../models/trainingREgistrationModel.js";
+} from "../models/trainingRegistrationModel.js";
 
 // ✅ Create - Register for training
 export const registerForTraining = async (req, res) => {
