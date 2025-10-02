@@ -17,10 +17,10 @@ app.use(express.json());
 // ✅ CORS handling in Express
 const allowedOrigins = [
   "https://front-end-9gvu.vercel.app", 
-  "https://premierhub.com", 
-  "http://premierhub.com", 
-  "https://www.premierhub.com",
-  "http://www.premierhub.com",
+  "https://premierhubrmc.com", 
+  "http://premierhubrmc.com", 
+  "https://www.premierhubrmc.com",
+  "http://www.premierhubrmc.com",
   
 ];
 
