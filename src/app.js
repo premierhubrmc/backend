@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import userRoutes from "./routes/users.js";
 import trainingRoutes from "./routes/training.js";
@@ -13,7 +14,26 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// 🚫 Removed CORS handling (Caddy will inject headers)
+// ✅ CORS handling in Express
+const allowedOrigins = [
+  "https://87cfe8e80ddd.ngrok-free.app", // your ngrok frontend
+  "https://your-vercel-app.vercel.app"   // later your Vercel frontend
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Origin", "Content-Type", "Authorization"],
+  })
+);
 
 // ✅ Routes
 app.use("/api", userRoutes);
