@@ -15,14 +15,16 @@ const app = express();
 app.use(express.json());
 
 // ✅ CORS handling in Express
+const baseDomain = "premierhubrmc.com";
+
 const allowedOrigins = [
-  "https://front-end-9gvu.vercel.app", 
-  "https://premierhubrmc.com", 
-  "http://premierhubrmc.com", 
-  "https://www.premierhubrmc.com",
-  "http://www.premierhubrmc.com",
-  
+  "https://front-end-9gvu.vercel.app",
+  `https://${baseDomain}`,
+  `http://${baseDomain}`,
+  `https://www.${baseDomain}`,
+  `http://www.${baseDomain}`
 ];
+
 
 app.use(
   cors({
