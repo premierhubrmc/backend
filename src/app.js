@@ -7,32 +7,27 @@ import trainingRoutes from "./routes/training.js";
 import eventRoutes from "./routes/event.js";
 import trainingRegistrationRoute from "./routes/trainingRegistration.js";
 
-import pool from "./config/db.js";
+import pool from "./config/db.js"; // <-- your MySQL pool
 
 dotenv.config();
 
 const app = express();
-
 app.use(express.json());
 
-// ✅ Define allowed origins (strings + regex)
+// ✅ Dynamic CORS: allows ngrok automatically
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://premierhubrmc.com",
-  "https://api.premierhubrmc.com",
-  /\.ngrok-free\.app$/,  // regex for ngrok tunnels
+  "https://premierhubrmc.com",   // production frontend
+  "https://api.premierhubrmc.com"
 ];
 
-// ✅ Use function-based origin check
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // allow mobile apps / curl / Postman
-
+    origin: function (origin, callback) {
       if (
-        allowedOrigins.some((o) =>
-          typeof o === "string" ? o === origin : o.test(origin)
-        )
+        !origin ||                                      // allow server-to-server / curl
+        allowedOrigins.includes(origin) ||              // exact match
+        /\.ngrok-free\.app$/.test(origin)               // ✅ any ngrok tunnel
       ) {
         callback(null, true);
       } else {
@@ -45,15 +40,13 @@ app.use(
   })
 );
 
-// ----------------------------------------------------
-// Routes
-// ----------------------------------------------------
+// Register routes
 app.use("/api", userRoutes);
 app.use("/api/trainings", trainingRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/training/registration", trainingRegistrationRoute);
 
-// DB status route
+// ✅ Add DB status check route
 app.get("/api/db-status", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT NOW() AS now");
