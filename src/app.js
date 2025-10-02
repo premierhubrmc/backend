@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
 
 import userRoutes from "./routes/users.js";
 import trainingRoutes from "./routes/training.js";
@@ -14,35 +13,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// ✅ Allowed origins
-const allowedOrigins = [
-  "http://localhost:5173",       // dev
-  /\.ngrok-free\.app$/,          // any ngrok tunnel
-  "https://premierhubrmc.com",   // production frontend
-  "https://api.premierhubrmc.com"
-];
-
-// ✅ Dynamic CORS
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow server-to-server requests
-
-      const isAllowed = allowedOrigins.some((o) =>
-        typeof o === "string" ? o === origin : o.test(origin)
-      );
-
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        console.log("❌ Blocked by CORS:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-  })
-);
+// 🚫 Removed CORS handling (Caddy will inject headers)
 
 // ✅ Routes
 app.use("/api", userRoutes);
