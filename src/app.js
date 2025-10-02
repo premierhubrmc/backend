@@ -25,13 +25,14 @@ const allowedOrigins = [
   `http://www.${baseDomain}`
 ];
 
-
+// ✅ Add CORS middleware
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.warn("❌ Blocked CORS request from:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -40,6 +41,9 @@ app.use(
     allowedHeaders: ["Origin", "Content-Type", "Authorization"],
   })
 );
+
+// ✅ Handle preflight OPTIONS requests explicitly
+app.options("*", cors());
 
 // ✅ Routes
 app.use("/api", userRoutes);
