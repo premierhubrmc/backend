@@ -16,8 +16,12 @@ app.use(express.json());
 
 // ✅ CORS handling in Express
 const allowedOrigins = [
-  "https://87cfe8e80ddd.ngrok-free.app", // your ngrok frontend
-  "https://your-vercel-app.vercel.app"   // later your Vercel frontend
+  "https://front-end-9gvu.vercel.app", 
+  "https://premierhub.com", 
+  "http://premierhub.com", 
+  "https://www.premierhub.com",
+  "http://www.premierhub.com",
+  
 ];
 
 app.use(
