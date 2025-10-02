@@ -7,60 +7,39 @@ import trainingRoutes from "./routes/training.js";
 import eventRoutes from "./routes/event.js";
 import trainingRegistrationRoute from "./routes/trainingRegistration.js";
 
-import pool from "./config/db.js"; // MySQL pool
+import pool from "./config/db.js"; // <-- your MySQL pool
 
 dotenv.config();
 
 const app = express();
 
-// Middleware
+// Parse JSON
 app.use(express.json());
 
-// -------------------
-// ✅ Robust CORS setup
-// -------------------
-const allowedOrigins = [
-  "http://localhost:5173",
-  /\.ngrok-free\.app$/,          // allow ngrok tunnels
-  "https://premierhubrmc.com",   // production frontend
-  "https://api.premierhubrmc.com"
-];
-
+// ✅ Define CORS options
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman, curl, etc.
-
-    const ok = allowedOrigins.some((o) => {
-      if (typeof o === "string") return o === origin;
-      if (o instanceof RegExp) return o.test(origin);
-      return false;
-    });
-
-    if (ok) return callback(null, true);
-
-    console.log("❌ Blocked by CORS:", origin);
-    return callback(new Error("Not allowed by CORS"));
-  },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-  exposedHeaders: ["Content-Length"],
+  origin: [
+    "http://localhost:5173",
+    /\.ngrok-free\.app$/,          // allow ngrok tunnels
+    "https://premierhubrmc.com",   // production frontend
+    "https://api.premierhubrmc.com"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
-  optionsSuccessStatus: 204,
 };
 
+// ✅ Apply CORS globally
 app.use(cors(corsOptions));
-// Handle preflight requests globally
-app.options("*", cors(corsOptions));
 
-// -------------------
-// API routes
-// -------------------
+// ----------------------------------------------------
+// Routes
+// ----------------------------------------------------
 app.use("/api", userRoutes);
 app.use("/api/trainings", trainingRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/training/registration", trainingRegistrationRoute);
 
-// ✅ Database status check
+// ✅ DB status check route
 app.get("/api/db-status", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT NOW() AS now");
