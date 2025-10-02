@@ -19,10 +19,10 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 
     if (NODE_ENV === "production") {
       // 🔐 Use SSL certs on Vultr
-      const options = {
-        key: fs.readFileSync("/etc/letsencrypt/live/api.premierhubrmc.com/privkey.pem"),
-        cert: fs.readFileSync("/etc/letsencrypt/live/api.premierhubrmc.com/fullchain.pem"),
-      };
+     const options = {
+  key: fs.readFileSync("/home/linuxuser/certs/privkey.pem"),
+  cert: fs.readFileSync("/home/linuxuser/certs/fullchain.pem"),
+};
 
       https.createServer(options, app).listen(443, "0.0.0.0", () => {
         console.log("🚀 HTTPS server running on port 443");
