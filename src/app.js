@@ -18,11 +18,18 @@ app.use(express.json());
 // Allow requests from your Vite frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // change to your deployed frontend later
+    origin: [
+       "http://localhost:5173",
+      /\.ngrok-free\.app$/,          // allow ngrok tunnels
+      "https://premierhubrmc.com",   // production frontend
+      "https://api.premierhubrmc.com"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
+
 
 // Register routes
 app.use("/api", userRoutes);
