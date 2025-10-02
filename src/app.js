@@ -14,21 +14,21 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// ✅ CORS handling in Express
+// 🌍 Allowed domains
 const baseDomain = "premierhubrmc.com";
-
 const allowedOrigins = [
   "https://front-end-9gvu.vercel.app",
   `https://${baseDomain}`,
   `http://${baseDomain}`,
   `https://www.${baseDomain}`,
-  `http://www.${baseDomain}`
+  `http://www.${baseDomain}`,
 ];
 
-// ✅ Add CORS middleware
+// 🔐 CORS setup
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow server-to-server or Postman (no origin header)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -42,16 +42,17 @@ app.use(
   })
 );
 
-// ✅ Handle preflight OPTIONS requests explicitly
-app.options("*", cors());
+// ⚡ (Optional) Explicit preflight support for all routes
+// Express v5 requires regex instead of "*"
+app.options(/.*/, cors());
 
-// ✅ Routes
+// 📌 API Routes
 app.use("/api", userRoutes);
 app.use("/api/trainings", trainingRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/training/registration", trainingRegistrationRoute);
 
-// ✅ Health check
+// 🩺 Health check endpoint
 app.get("/api/db-status", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT NOW() AS now");
