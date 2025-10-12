@@ -22,6 +22,7 @@ const allowedOrigins = [
   `http://${baseDomain}`,
   `https://www.${baseDomain}`,
   `http://www.${baseDomain}`,
+  `http://localhost:5173`,
 ];
 
 // 🔐 CORS setup
